@@ -1,0 +1,46 @@
+sequenceDiagram
+    participant C as Cliente
+    participant CC as CarritoCompra
+    participant S as Sistema
+    participant P as Pedido
+    participant Prod as Producto
+    participant PDP as PasarelaDePago
+
+    C->>S: iniciarCheckout(carrito)
+    activate S
+
+    S->>CC: obtenerItems()
+    activate CC
+    CC-->>S: listaDeItems
+    deactivate CC
+
+    loop para cada item en listaDeItems
+        S->>Prod: estaDisponible(cantidad)
+        activate Prod
+        Prod-->>S: boolean (true/false)
+        deactivate Prod
+    end
+
+    alt Hay stock para todo
+        S->>P: crearPedido(datosCliente, listaItems)
+        activate P
+        P-->>S: pedidoCreado
+        deactivate P
+
+        S->>PDP: procesarPago(monto, datosPago)
+        activate PDP
+        PDP-->>S: pagoExitoso
+        deactivate PDP
+
+        loop para cada item en pedidoCreado
+            S->>Prod: actualizarStock(cantidadComprada)
+            activate Prod
+            Prod-->>S: stockActualizado
+            deactivate Prod
+        end
+
+        S->>C: notificarCompraExitosa()
+    else No hay stock suficiente
+        S->>C: notificarFalloStock()
+    end
+    deactivate S
