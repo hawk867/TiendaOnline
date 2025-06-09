@@ -1,0 +1,70 @@
+---
+title: Tienda Online G&M
+---
+classDiagram
+direction TB
+    class Usuario {
+	    #int idUsuario
+	    #String nombre
+	    #String email
+	    #String passwordHash
+	    +iniciarSesion(email, password)
+	    +cerrarSesion()
+	    +registrar()
+	    +actualizarPerfil()
+    }
+    class Cliente {
+	    +String direccionEnvio
+	    +verHistorialPedidos()
+    }
+    class Administrador {
+	    +gestionarProducto()
+	    +gestionarCategoria()
+	    +verTodosLosPedidos()
+	    +actualizarEstadoPedido()
+    }
+    class CarritoCompra {
+	    +int idCarrito
+	    +agregarItem(Producto, int)
+	    +eliminarItem(int)
+	    +calcularTotal()
+    }
+    class ItemCarrito {
+	    +int cantidad
+	    +calcularSubtotal()
+    }
+    class Producto {
+	    +int idProducto
+	    +String nombre
+	    +double precio
+	    +int stock
+    }
+    class Categoria {
+	    +int idCategoria
+	    +String nombre
+    }
+    class Pedido {
+	    +int idPedido
+	    +Date fecha
+	    +String estado
+	    +double total
+    }
+    class DetallePedido {
+	    +int cantidad
+	    +double precioUnitario
+    }
+
+	<<Abstract>> Usuario
+
+    Usuario <|-- Cliente
+    Usuario <|-- Administrador
+    Cliente "1" -- "0..1" CarritoCompra : tiene
+    Cliente "1" -- "0..*" Pedido : realiza
+    Administrador ..> Producto : gestiona
+    Administrador ..> Categoria : gestiona
+    Administrador ..> Pedido : gestiona
+    CarritoCompra "1" o-- "*" ItemCarrito : contiene
+    ItemCarrito "1" -- "1" Producto : referencia
+    Categoria "1" -- "*" Producto : agrupa
+    Pedido "1" *-- "1..*" DetallePedido : consiste en
+    DetallePedido "1" -- "1" Producto : referencia

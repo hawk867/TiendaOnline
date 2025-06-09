@@ -1,0 +1,39 @@
+flowchart TD
+    %% 1. Definir Actores
+    Cliente[Cliente]
+    Administrador[Administrador]
+
+    %% 2. Definir Casos de Uso (agrupados visualmente con un subgraph)
+    subgraph "Tienda Online G&M"
+        UC1[UC-01: Registrarse]
+        UC2[UC-02: Iniciar Sesión]
+        UC3[UC-03: Buscar y Ver Productos]
+        UC4[UC-04: Gestionar Carrito]
+        UC5[UC-05: Realizar Compra]
+        UC6[UC-06: Ver Historial de Pedidos]
+        UC7[UC-07: Recuperar Contraseña]
+        UC8[UC-08: Procesar Pago]
+
+        UC_A1[UC-A1: Gestionar Catálogo]
+        UC_A2[UC-A2: Gestionar Inventario]
+        UC_A3[UC-A3: Gestionar Pedidos]
+    end
+
+    %% 3. Establecer TODAS las relaciones
+
+    %% Relaciones Actor -> Caso de Uso
+    Cliente --> UC1
+    Cliente --> UC2
+    Cliente --> UC3
+    Cliente --> UC4
+    Cliente --> UC5
+    Cliente --> UC6
+
+    Administrador --> UC2
+    Administrador --> UC_A1
+    Administrador --> UC_A2
+    Administrador --> UC_A3
+
+    %% Relaciones Caso de Uso -> Caso de Uso
+    UC5 --> UC8
+    UC2 --> UC7
